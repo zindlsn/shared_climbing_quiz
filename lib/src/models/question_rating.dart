@@ -3,13 +3,13 @@ import 'package:shared_climbing_quiz/src/models/level.dart';
 
 class QuestionRating {
   String questionId;
-  Level? rateLevel;
+  Level rateLevel = Level.None;
   bool likedQuestion;
   String comment;
 
   QuestionRating(
       {required this.questionId,
-      this.rateLevel,
+      required this.rateLevel,
       required this.likedQuestion,
       required this.comment});
 
