@@ -4,7 +4,7 @@ import 'package:shared_climbing_quiz/src/models/level.dart';
 class QuestionRating {
   String questionId;
   Level rateLevel = Level.None;
-  bool likedQuestion;
+  bool? likedQuestion;
   String comment;
 
   QuestionRating(
