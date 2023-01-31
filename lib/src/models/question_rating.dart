@@ -1,21 +1,20 @@
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:shared_climbing_quiz/src/models/level.dart';
 
 class QuestionRating {
   String questionId;
-  Level rateLevel = Level.None;
+  int difficultRating = 0;
   bool? likedQuestion;
   String comment;
 
   QuestionRating(
       {required this.questionId,
-      required this.rateLevel,
+      required this.difficultRating,
       required this.likedQuestion,
       required this.comment});
 
   Map<String, dynamic> toJson() => {
         'questionId': questionId,
-        'rateLevel': EnumToString.convertToString(rateLevel, camelCase: true),
+        'difficultRating': difficultRating,
         'likedQuestion': likedQuestion,
         'comment': comment,
       };
@@ -23,8 +22,7 @@ class QuestionRating {
   static fromJson(Map<String, dynamic> parsedJson) {
     return QuestionRating(
         questionId: parsedJson['questionId'],
-        rateLevel:
-            EnumToString.fromString(Level.values, parsedJson['rateLevel'])!,
+        difficultRating: parsedJson['difficultRating'],
         likedQuestion: parsedJson['likedQuestion'],
         comment: parsedJson['comment']);
   }
