@@ -26,7 +26,8 @@ class SelectQuestion extends Question {
     return SelectQuestion(
         content: parsedJson['content'],
         isActive: parsedJson['isActive'] as bool,
-        topic: parsedJson['topic'],
+        topic: EnumToString.fromString(Topic.values, parsedJson['topic'],
+            camelCase: true)!,
         questionType: EnumToString.fromString(
             QuestionType.values, parsedJson['questionType'],
             camelCase: true)!);
