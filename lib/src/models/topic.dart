@@ -1,5 +1,6 @@
 enum Topic{
   Geographic,
   Organization,
-  Climbing
+  Climbing,
+  GeneralKnowledge
 }
