@@ -6,7 +6,6 @@ class QuestionService {
   FirebaseFirestore? db = FirebaseFirestore.instance;
 
   Future addSimpleQuestion(SelectQuestion question) async {
-    print(question.toJson());
     DocumentReference document =
         await db!.collection("questions").add(question.toJson());
     await db!
@@ -14,6 +13,10 @@ class QuestionService {
         .doc(document.id)
         .collection('answers')
         .add(question.answer.toJson());
+  }
+
+  Future deleteQuestion(String id)async{
+    await db!.collection('questions').doc(id).delete();
   }
 
   Future<List<SelectQuestion>> getAllQuestions() async {

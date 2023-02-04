@@ -1,6 +1,3 @@
-/// Support for doing something awesome.
-///
-/// More dartdocs go here.
 library shared_climbing_quiz;
 
 export 'src/models/answer.dart';
@@ -12,5 +9,6 @@ export 'src/models/question_rating.dart';
 export 'src/models/question_type.dart';
 export 'src/models/take_answer.dart';
 export 'src/models/topic.dart';
-
-// TODO: Export any libraries intended for clients of this package.
+export 'src/services/question_service.dart';
+export 'src/services/question_rate_service.dart';
+export 'src/models/question_understanding.dart';
