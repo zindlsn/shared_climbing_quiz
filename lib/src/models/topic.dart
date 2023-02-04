@@ -6,6 +6,7 @@ enum Topic {
   General,
   Media,
   Olympia,
+  Competition,
   IceClimbing,
   FirstAid,
   Hardware,
