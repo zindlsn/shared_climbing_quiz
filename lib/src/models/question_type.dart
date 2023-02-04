@@ -1,5 +1,1 @@
-enum QuestionType{
-  SingleChoice,
-  MultipleChoice,
-  Select
-}
+enum QuestionType { SingleChoice, MultipleChoice, Select }

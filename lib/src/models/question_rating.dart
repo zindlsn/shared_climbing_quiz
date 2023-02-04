@@ -1,8 +1,13 @@
+import 'package:enum_to_string/enum_to_string.dart';
+import 'package:shared_climbing_quiz/src/models/globals.dart';
+import 'package:shared_climbing_quiz/src/models/question_understanding.dart';
+
 class QuestionRating {
   String questionId;
   int difficultRating = 0;
   bool? likedQuestion;
   String comment;
+  late QuestionUnderstanding? questionUnderstanding;
   late DateTime createdAt;
 
   QuestionRating(
@@ -18,7 +23,10 @@ class QuestionRating {
         'difficultRating': difficultRating,
         'likedQuestion': likedQuestion,
         'comment': comment,
-        'createdAt': createdAt.toString()
+        'createdAt': createdAt.toString(),
+        'questionUnderstanding':
+            EnumToString.convertToString(questionUnderstanding)
+                .removeAllWhitespace
       };
 
   static fromJson(Map<String, dynamic> parsedJson) {
@@ -27,6 +35,9 @@ class QuestionRating {
       difficultRating: parsedJson['difficultRating'] as int,
       likedQuestion: parsedJson['likedQuestion'] as bool,
       comment: parsedJson['comment'],
-    )..createdAt = DateTime.parse(parsedJson['createdAt']);
+    )
+      ..createdAt = DateTime.parse(parsedJson['createdAt'])
+      ..questionUnderstanding = EnumToString.fromString(
+          QuestionUnderstanding.values, parsedJson['questionUnderstanding']);
   }
 }

@@ -19,6 +19,8 @@ class Answer {
 
   static fromJson(Map<String, dynamic> parsedJson) {
     return Answer()
+      ..isActive = parsedJson['isActive'] as bool
+      ..createdAt = DateTime.parse(parsedJson['createdAt'])
       ..content = parsedJson['content']
       ..explanation = parsedJson['explanation'];
   }

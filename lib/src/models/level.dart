@@ -1,6 +1,1 @@
-enum Level{
-  None,
-  Simple,
-  Middle,
-  Hard
-}
+enum Level { None, Simple, Middle, Hard }

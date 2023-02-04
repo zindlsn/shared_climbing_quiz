@@ -1,4 +1,5 @@
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:shared_climbing_quiz/src/models/globals.dart';
 import 'package:shared_climbing_quiz/src/models/level.dart';
 import 'package:shared_climbing_quiz/src/models/question_rating.dart';
 import 'package:shared_climbing_quiz/src/models/question_type.dart';
@@ -26,7 +27,8 @@ class Question {
         'isActive': isActive,
         'questionType':
             EnumToString.convertToString(questionType, camelCase: true),
-        'topic': EnumToString.convertToString(topic, camelCase: true),
+        'topic': EnumToString.convertToString(topic, camelCase: true)
+            .removeAllWhitespace(),
         'content': content,
         'createdTime': createdAt.toString()
       };
