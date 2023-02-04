@@ -16,8 +16,7 @@ class SelectQuestion extends Question {
         'isActive': isActive,
         'questionType':
             EnumToString.convertToString(questionType, camelCase: true),
-        'topic': EnumToString.convertToString(topic, camelCase: true)
-            .removeAllWhitespace,
+        'topic': EnumToString.convertToString(topic, camelCase: true),
         'content': content,
         'createdTime': createdAt.toString()
       };

@@ -2,5 +2,6 @@ enum Topic{
   Geographic,
   Organization,
   Climbing,
-  General
+  General,
+  Media
 }
