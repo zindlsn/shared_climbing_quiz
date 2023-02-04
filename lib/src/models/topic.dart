@@ -1,7 +1,19 @@
-enum Topic{
+enum Topic {
   Geographic,
   Organization,
   Climbing,
+  Bouldering,
   General,
-  Media
+  Media,
+  Olympia,
+  IceClimbing,
+  FirstAid,
+  Hardware,
+  Physic,
+  Magazine,
+  Movies,
+  Celebreties,
+  Cites,
+  Outdoor,
+  Scales
 }
