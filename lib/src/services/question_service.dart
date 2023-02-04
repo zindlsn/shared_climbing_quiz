@@ -24,7 +24,7 @@ class QuestionService {
     try {
       final db = FirebaseFirestore.instance;
       QuerySnapshot<Map<String, dynamic>> questionsDocs =
-          await db.collection("questions").get();
+          await db.collection("questions").orderBy('createdTime',descending: true).get();
       if (kDebugMode) {
         print(questionsDocs.size);
       }
