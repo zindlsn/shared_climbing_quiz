@@ -1,6 +1,5 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:shared_climbing_quiz/shared_climbing_quiz.dart';
-import 'package:shared_climbing_quiz/src/models/globals.dart';
 
 class SelectQuestion extends Question {
   late Answer answer;
@@ -22,6 +21,17 @@ class SelectQuestion extends Question {
       };
 
   static fromJson(Map<String, dynamic> parsedJson) {
+    return SelectQuestion(
+        content: parsedJson['content'],
+        isActive: parsedJson['isActive'] as bool,
+        topic: EnumToString.fromString(Topic.values, parsedJson['topic'],
+            camelCase: true)!,
+        questionType: EnumToString.fromString(
+            QuestionType.values, parsedJson['questionType'],
+            camelCase: true)!);
+  }
+
+  factory SelectQuestion.fromJsonLoaded(Map<String, dynamic> parsedJson) {
     return SelectQuestion(
         content: parsedJson['content'],
         isActive: parsedJson['isActive'] as bool,
