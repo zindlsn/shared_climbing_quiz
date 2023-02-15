@@ -9,6 +9,8 @@ class QuestionService {
   FirebaseFirestore? db = FirebaseFirestore.instance;
   LocalStorageService storageService = LocalStorageService();
 
+  int? lastQuestionNumber;
+
   Future addSimpleQuestion(SelectQuestion question) async {
     DocumentReference document =
     await db!.collection("questions").add(question.toJson());
@@ -19,8 +21,18 @@ class QuestionService {
         .add(question.answer.toJson());
   }
 
-  Future deleteQuestion(String id) async {
+  Future<void> deleteQuestion(String id) async {
     await db!.collection('questions').doc(id).delete();
+  }
+
+  Future saveLastQuestionNumber(int id) async {
+    bool questionNumberSavedSuccessfully = await storageService
+        .saveLastQuestionNumber(id);
+    print(questionNumberSavedSuccessfully);
+  }
+
+  Future<void> loadLastQuestionNumber() async {
+   lastQuestionNumber = await storageService.loadLastQuestionNumber();
   }
 
   Future<List<SelectQuestion>> getAllQuestionsAsync() async {
@@ -47,11 +59,6 @@ class QuestionService {
           sq.answer = Answer.fromJson(aws.docs.first.data());
           result.add(sq);
         }
-
-        var json = jsonEncode(result.map((e) => e.toJson()).toList());
-        if (await storageService.saveQuestionsToLocalAsync(jsonEncode(json))) {
-          print('saved');
-        }
         print('from online loaded');
       } catch (ex) {
         if (kDebugMode) {
@@ -59,14 +66,19 @@ class QuestionService {
         }
       }
     } else {
-      String? questionsAsString = await storageService
-          .loadQuestionsFromLocalAsJsonAsync();
+      String? questionsAsString =
+      await storageService.loadQuestionsFromLocalAsJsonAsync();
       if (questionsAsString != null) {
-        List<dynamic> parsedListJson = jsonDecode(questionsAsString);
-        result = List<SelectQuestion>.from(
-            parsedListJson.map<SelectQuestion>((dynamic i) =>
-                SelectQuestion.fromJson(i)));
-        print('from local loaded');
+        //  results =  (json.decode(questionsAsString!) as List).map((i) =>
+        //     SelectQuestion.fromJson(i)).toList();
+        try {
+          //  final List<dynamic> dataList = jsonDecode(questionsAsString!);
+          //print(dataList[0]); // {text: foo, value: 1, status: true}
+          //  print(dataList[1]); // {text: bar, value: 2, status: false}
+          // print('from local loaded');
+        } catch (ex) {
+          print(ex);
+        }
       }
     }
     return result;

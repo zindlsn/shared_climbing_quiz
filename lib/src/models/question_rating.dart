@@ -25,8 +25,7 @@ class QuestionRating {
         'comment': comment,
         'createdAt': createdAt.toString(),
         'questionUnderstanding':
-            EnumToString.convertToString(questionUnderstanding)
-                .removeAllWhitespace
+            EnumToString.convertToString(questionUnderstanding,camelCase: true)
       };
 
   static fromJson(Map<String, dynamic> parsedJson) {

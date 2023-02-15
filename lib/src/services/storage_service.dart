@@ -16,6 +16,18 @@ class LocalStorageService {
     return await prefs.setString('questionsAsJson', questionsAsJson);
   }
 
+  Future<bool> saveLastQuestionNumber(int number) async {
+    final SharedPreferences prefs = await _prefs;
+    return await prefs.setInt('lastQuestionNumber', number);
+  }
+
+  Future<int?> loadLastQuestionNumber() async {
+    final SharedPreferences prefs = await _prefs;
+    int? savedNumber = prefs.getInt('lastQuestionNumber');
+    print(savedNumber);
+    return await Future.value(savedNumber);
+  }
+
   Future<String?> loadQuestionsFromLocalAsJsonAsync() async {
     final SharedPreferences prefs = await _prefs;
     if (prefs.containsKey('questionsAsJson')) {
@@ -24,6 +36,7 @@ class LocalStorageService {
       return null;
     }
   }
+
 
   Future<bool> hasQuestionsSavedAsync() async {
     final SharedPreferences prefs = await _prefs;
