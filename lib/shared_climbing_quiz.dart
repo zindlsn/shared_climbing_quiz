@@ -12,3 +12,5 @@ export 'src/models/topic.dart';
 export 'src/services/question_service.dart';
 export 'src/services/question_rate_service.dart';
 export 'src/models/question_understanding.dart';
+export 'src/models/answer_rating.dart';
+export 'src/models/answer_rating_level.dart';

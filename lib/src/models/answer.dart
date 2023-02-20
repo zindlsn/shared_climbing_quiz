@@ -1,3 +1,5 @@
+import 'package:shared_climbing_quiz/src/models/answer_rating.dart';
+
 class Answer {
   late bool isActive = true;
   late bool correct;
@@ -5,6 +7,8 @@ class Answer {
   late DateTime updatedAt;
   late String content;
   late String explanation;
+
+  late AnswerRating rating;
 
   Answer() {
     createdAt = DateTime.now();
