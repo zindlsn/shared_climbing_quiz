@@ -43,7 +43,7 @@ class QuestionService {
             .orderBy('createdTime', descending: true);
 
         if (onlyActive) {
-          questionsDocs.where('isActive', isEqualTo: onlyActive);
+          questionsDocs.where('isActive' ,isEqualTo: true);
         }
 
         QuerySnapshot<Map<String, dynamic>> docs = await questionsDocs.get();
@@ -54,12 +54,7 @@ class QuestionService {
           if (kDebugMode) {}
           SelectQuestion sq = SelectQuestion.fromJson(doc.data());
           sq.id = doc.id;
-          var aws = await db
-              .collection('questions')
-              .doc(doc.id)
-              .collection('answers')
-              .get();
-          sq.answer = Answer.fromJson(aws.docs.first.data());
+          sq.answer = Answer.fromJson(doc.get('answers'));
           result.add(sq);
         }
         print('from online loaded');
