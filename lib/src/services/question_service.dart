@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_climbing_quiz/shared_climbing_quiz.dart';
@@ -13,7 +11,7 @@ class QuestionService {
 
   Future addSimpleQuestion(SelectQuestion question) async {
     DocumentReference document =
-    await db!.collection("questions").add(question.toJson());
+        await db!.collection("questions").add(question.toJson());
     await db!
         .collection('questions')
         .doc(document.id)
@@ -26,28 +24,33 @@ class QuestionService {
   }
 
   Future saveLastQuestionNumber(int id) async {
-    bool questionNumberSavedSuccessfully = await storageService
-        .saveLastQuestionNumber(id);
+    bool questionNumberSavedSuccessfully =
+        await storageService.saveLastQuestionNumber(id);
     print(questionNumberSavedSuccessfully);
   }
 
   Future<void> loadLastQuestionNumber() async {
-   lastQuestionNumber = await storageService.loadLastQuestionNumber();
+    lastQuestionNumber = await storageService.loadLastQuestionNumber();
   }
 
-  Future<List<SelectQuestion>> getAllQuestionsAsync() async {
+  Future<List<SelectQuestion>> getAllQuestionsAsync({bool onlyActive = false}) async {
     List<SelectQuestion> result = [];
     if (!await storageService.hasQuestionsSavedAsync()) {
       try {
         final db = FirebaseFirestore.instance;
-        QuerySnapshot<Map<String, dynamic>> questionsDocs = await db
+        Query<Map<String, dynamic>> questionsDocs = await db
             .collection("questions")
-            .orderBy('createdTime', descending: true)
-            .get();
-        if (kDebugMode) {
-          print(questionsDocs.size);
+            .orderBy('createdTime', descending: true);
+
+        if (onlyActive) {
+          questionsDocs.where('isActive', isEqualTo: onlyActive);
         }
-        for (var doc in questionsDocs.docs) {
+
+        QuerySnapshot<Map<String, dynamic>> docs = await questionsDocs.get();
+        if (kDebugMode) {
+          print(docs.size);
+        }
+        for (var doc in docs.docs) {
           if (kDebugMode) {}
           SelectQuestion sq = SelectQuestion.fromJson(doc.data());
           sq.id = doc.id;
@@ -67,7 +70,7 @@ class QuestionService {
       }
     } else {
       String? questionsAsString =
-      await storageService.loadQuestionsFromLocalAsJsonAsync();
+          await storageService.loadQuestionsFromLocalAsJsonAsync();
       if (questionsAsString != null) {
         //  results =  (json.decode(questionsAsString!) as List).map((i) =>
         //     SelectQuestion.fromJson(i)).toList();
@@ -87,7 +90,9 @@ class QuestionService {
   Future<bool> updateQuestionAsync(SelectQuestion question) async {
     final db = FirebaseFirestore.instance;
     final questionDocument = db.collection("questions").doc(question.id);
-    questionDocument.set(question.toJson());
+    await questionDocument.set(question.toJson());
+    await questionDocument.collection('answers').doc().set(
+        question.answer.toJson());
     return Future.value(true);
   }
 }

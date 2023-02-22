@@ -17,7 +17,8 @@ class SelectQuestion extends Question {
             EnumToString.convertToString(questionType, camelCase: true),
         'topic': EnumToString.convertToString(topic, camelCase: true),
         'content': content,
-        'createdTime': createdAt.toString()
+        'createdTime': createdAt.toString(),
+        'answers' : answer.toJson()
       };
 
   static fromJson(Map<String, dynamic> parsedJson) {
