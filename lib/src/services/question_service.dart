@@ -55,10 +55,10 @@ class QuestionService {
           if (kDebugMode) {}
           SelectQuestion sq = SelectQuestion.fromJson(doc.data());
           sq.id = doc.id;
-          Map<String, dynamic> answer = doc.data().containsKey('answers')
+          Map<String, dynamic>? answer = doc.data().containsKey('answers')
               ? await doc.get('answers')
               : null;
-          if (answer.isNotEmpty) {
+          if (answer != null && answer.isNotEmpty) {
             sq.answer = Answer.fromJson(doc.get('answers'));
           }
           result.add(sq);
