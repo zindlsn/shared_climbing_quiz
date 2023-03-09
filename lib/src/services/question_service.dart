@@ -44,15 +44,18 @@ class QuestionService {
             .orderBy('createdTime', descending: true);
 
         if (onlyActive) {
-          questionsDocs.where('isActive', isEqualTo: true);
+          questionsDocs.where('isActive', isEqualTo: onlyActive);
         }
 
         QuerySnapshot<Map<String, dynamic>> docs = await questionsDocs.get();
         if (kDebugMode) {
           print(docs.size);
         }
+        int i = 0;
         for (var doc in docs.docs) {
           if (kDebugMode) {}
+          print(i++);
+          print(doc.id);
           SelectQuestion sq = SelectQuestion.fromJson(doc.data());
           sq.id = doc.id;
           Map<String, dynamic>? answer = doc.data().containsKey('answers')
@@ -60,6 +63,9 @@ class QuestionService {
               : null;
           if (answer != null && answer.isNotEmpty) {
             sq.answer = Answer.fromJson(doc.get('answers'));
+          }
+          if (answer == null) {
+            sq.answer = Answer();
           }
           result.add(sq);
         }
