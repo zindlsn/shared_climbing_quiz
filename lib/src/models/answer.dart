@@ -11,6 +11,8 @@ class Answer {
 
   Answer() {
     createdAt = DateTime.now();
+    content = '';
+    explanation = '';
   }
 
   Map<String, dynamic> toJson() => {

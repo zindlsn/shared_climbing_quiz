@@ -60,12 +60,9 @@ class QuestionService {
           sq.id = doc.id;
           Map<String, dynamic>? answer = doc.data().containsKey('answers')
               ? await doc.get('answers')
-              : null;
+              : Answer();
           if (answer != null && answer.isNotEmpty) {
-            sq.answer = Answer.fromJson(doc.get('answers'));
-          }
-          if (answer == null) {
-            sq.answer = Answer();
+            sq.answer = Answer.fromJson(answer[0]);
           }
           result.add(sq);
         }
