@@ -1,4 +1,5 @@
 enum Topic {
+  None,
   Geographic,
   Organization,
   Climbing,

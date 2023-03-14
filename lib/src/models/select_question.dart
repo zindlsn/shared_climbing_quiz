@@ -16,30 +16,32 @@ class SelectQuestion extends Question {
         'questionType':
             EnumToString.convertToString(questionType, camelCase: true),
         'topic': EnumToString.convertToString(topic, camelCase: true),
-        'content': content,
+        'content': content ?? '',
         'createdTime': createdAt.toString(),
-        'answers' : answer.toJson()
+        'answers': answer.toJson() ?? ''
       };
 
   static fromJson(Map<String, dynamic> parsedJson) {
     return SelectQuestion(
-        content: parsedJson['content'],
+        content: parsedJson['content'] ?? '',
         isActive: parsedJson['isActive'] as bool,
         topic: EnumToString.fromString(Topic.values, parsedJson['topic'],
-            camelCase: true)!,
-        questionType: EnumToString.fromString(
-            QuestionType.values, parsedJson['questionType'],
+                camelCase: true) ??
+            Topic.None,
+        questionType: EnumToString.fromString(QuestionType.values,
+            parsedJson['questionType'] ?? QuestionType.SingleChoice,
             camelCase: true)!);
   }
 
   factory SelectQuestion.fromJsonLoaded(Map<String, dynamic> parsedJson) {
     return SelectQuestion(
-        content: parsedJson['content'],
+        content: parsedJson['content'] ?? '',
         isActive: parsedJson['isActive'] as bool,
         topic: EnumToString.fromString(Topic.values, parsedJson['topic'],
-            camelCase: true)!,
-        questionType: EnumToString.fromString(
-            QuestionType.values, parsedJson['questionType'],
+                camelCase: true) ??
+            Topic.None,
+        questionType: EnumToString.fromString(QuestionType.values,
+            parsedJson['questionType'] ?? QuestionType.Select,
             camelCase: true)!);
   }
 }
