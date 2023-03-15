@@ -11,7 +11,7 @@ class QuestionService {
 
   Future addSimpleQuestion(SelectQuestion question) async {
     DocumentReference document =
-        await db!.collection("questions").add(question.toJson());
+    await db!.collection("questions").add(question.toJson());
     await db!
         .collection('questions')
         .doc(document.id)
@@ -25,7 +25,7 @@ class QuestionService {
 
   Future saveLastQuestionNumber(int id) async {
     bool questionNumberSavedSuccessfully =
-        await storageService.saveLastQuestionNumber(id);
+    await storageService.saveLastQuestionNumber(id);
     print(questionNumberSavedSuccessfully);
   }
 
@@ -40,7 +40,7 @@ class QuestionService {
       try {
         final db = FirebaseFirestore.instance;
         Query<Map<String, dynamic>> questionsDocs = await db
-            .collection("questions")
+            .collection('questions')
             .orderBy('createdTime', descending: true);
 
         if (onlyActive) {
@@ -53,16 +53,26 @@ class QuestionService {
         }
         int i = 0;
         for (var doc in docs.docs) {
-          if (kDebugMode) {}
-          print(i++);
-          print(doc.id);
+          if (kDebugMode) {
+            print(i++);
+            print(doc.id);
+
+            if (doc.id.startsWith('2NogiaAijcQrNwWO4Tj8')) {
+              print(doc.id);
+            }
+          }
           SelectQuestion sq = SelectQuestion.fromJson(doc.data());
           sq.id = doc.id;
-          Map<String, dynamic>? answer = doc.data().containsKey('answers')
-              ? await doc.get('answers')
-              : Answer();
-          if (answer != null && answer.isNotEmpty) {
-            sq.answer = Answer.fromJson(answer[0]);
+          Map<String, dynamic>? answer;
+          if (doc
+              .data()
+              .keys
+              .contains('answers')) {
+            QuerySnapshot<Map<String, dynamic>> answers = await db.collection(
+                'questions').doc(doc.id).collection('answers').get();
+            sq.answer = Answer.fromJson(answers.docs.first.data());
+          } else {
+            sq.answer = Answer();
           }
           result.add(sq);
         }
@@ -72,9 +82,11 @@ class QuestionService {
           print(ex);
         }
       }
-    } else {
+    }
+
+    else {
       String? questionsAsString =
-          await storageService.loadQuestionsFromLocalAsJsonAsync();
+      await storageService.loadQuestionsFromLocalAsJsonAsync();
       if (questionsAsString != null) {
         //  results =  (json.decode(questionsAsString!) as List).map((i) =>
         //     SelectQuestion.fromJson(i)).toList();
@@ -88,7 +100,11 @@ class QuestionService {
         }
       }
     }
-    return result;
+    return
+
+      result
+
+    ;
   }
 
   Future<bool> updateQuestionAsync(SelectQuestion question) async {
