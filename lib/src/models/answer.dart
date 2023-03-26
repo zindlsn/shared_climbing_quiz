@@ -13,18 +13,21 @@ class Answer {
     createdAt = DateTime.now();
     content = '';
     explanation = '';
+    correct = false;
   }
 
   Map<String, dynamic> toJson() => {
         'createdAt': createdAt.toString(),
         'content': content,
-        'explanation': explanation
+        'explanation': explanation,
+        'correct': correct
       };
 
   static fromJson(Map<String, dynamic> parsedJson) {
     return Answer()
       ..createdAt = DateTime.parse(parsedJson['createdAt'])
       ..content = parsedJson['content']
+      ..correct = parsedJson['correct'] ?? false
       ..explanation = parsedJson['explanation'];
   }
 }

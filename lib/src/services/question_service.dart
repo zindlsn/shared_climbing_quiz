@@ -10,11 +10,35 @@ class QuestionService {
   FirebaseFirestore? db = FirebaseFirestore.instance;
   LocalStorageService storageService = LocalStorageService();
 
+  Future addSingleChoiceQuestion(
+      SingleChoiceQuestion singleChoiceQuestion) async {
+    DocumentReference document = await db!
+        .collection(kSingleChoiceTable)
+        .add(singleChoiceQuestion.toJson());
+    await db!
+        .collection(kSingleChoiceTable)
+        .doc(document.id)
+        .update({"solution": singleChoiceQuestion.solution.toJson()});
+  }
+
+  Future<bool> updateSingleChoiceQuestion(SingleChoiceQuestion question) async {
+    final db = FirebaseFirestore.instance;
+    final questionDocument = db.collection(kSingleChoiceTable).doc(question.id);
+    questionDocument.set(question.toJson());
+    db
+        .collection(kSingleChoiceTable)
+        .doc(question.id)
+        .update({"solution": question.solution.toJson()});
+    return Future.value(true);
+  }
+
   Future addSimpleQuestion(SelectQuestion question) async {
-    DocumentReference document = await db!.collection(kQuestionTable).add(
-        question.toJson());
-    await db!.collection(kQuestionTable).doc(document.id).update(
-        {"answers": question.answer.toJson()});
+    DocumentReference document =
+        await db!.collection(kQuestionTable).add(question.toJson());
+    await db!
+        .collection(kQuestionTable)
+        .doc(document.id)
+        .update({"answers": question.answer.toJson()});
   }
 
   Future deleteQuestion(String id) async {
@@ -26,8 +50,10 @@ class QuestionService {
     if (true) {
       try {
         final db = FirebaseFirestore.instance;
-        QuerySnapshot<Map<String, dynamic>> questionsDocs = await db.collection(
-            kQuestionTable).orderBy('createdTime', descending: true).get();
+        QuerySnapshot<Map<String, dynamic>> questionsDocs = await db
+            .collection(kQuestionTable)
+            .orderBy('createdTime', descending: true)
+            .get();
         if (kDebugMode) {
           print(questionsDocs.size);
         }
@@ -37,7 +63,7 @@ class QuestionService {
             if (doc.id.startsWith('NtvI')) {
               print(doc.id);
             }
-            if(i == 29){
+            if (i == 29) {
               print(doc.id);
             }
             i++;
@@ -60,14 +86,49 @@ class QuestionService {
         }
       }
     } else {
-      String? questionsAsString = await storageService
-          .loadQuestionsFromLocalAsJsonAsync();
+      String? questionsAsString =
+          await storageService.loadQuestionsFromLocalAsJsonAsync();
       if (questionsAsString != null) {
         List<dynamic> parsedListJson = jsonDecode(questionsAsString);
-        result = List<SelectQuestion>.from(
-            parsedListJson.map<SelectQuestion>((dynamic i) =>
-                SelectQuestion.fromJson(i)));
+        result = List<SelectQuestion>.from(parsedListJson
+            .map<SelectQuestion>((dynamic i) => SelectQuestion.fromJson(i)));
         print('from local loaded');
+      }
+    }
+    return result;
+  }
+
+  Future<List<SingleChoiceQuestion>> getAllSingleChoiceQuestionsAsync() async {
+    List<SingleChoiceQuestion> result = [];
+    if (true) {
+      try {
+        final db = FirebaseFirestore.instance;
+        QuerySnapshot<Map<String, dynamic>> questionsDocs = await db
+            .collection(kSingleChoiceTable)
+            .orderBy('createdTime', descending: true)
+            .get();
+        int i = 0;
+        for (var doc in questionsDocs.docs) {
+          if (kDebugMode) {
+            if (doc.id.startsWith('NtvI')) {
+              print(doc.id);
+            }
+            i++;
+          }
+          SingleChoiceQuestion sq = SingleChoiceQuestion.fromJson(doc.data());
+          sq.id = doc.id;
+          result.add(sq);
+        }
+
+        var json = jsonEncode(result.map((e) => e.toJson()).toList());
+        if (await storageService.saveQuestionsToLocalAsync(jsonEncode(json))) {
+          print('saved');
+        }
+        print('from online loaded');
+      } catch (ex) {
+        if (kDebugMode) {
+          print(ex);
+        }
       }
     }
     return result;
@@ -77,8 +138,10 @@ class QuestionService {
     final db = FirebaseFirestore.instance;
     final questionDocument = db.collection(kQuestionTable).doc(question.id);
     questionDocument.set(question.toJson());
-    db.collection(kQuestionTable).doc(question.id).update(
-        {"answers": question.answer.toJson()});
+    db
+        .collection(kQuestionTable)
+        .doc(question.id)
+        .update({"answers": question.answer.toJson()});
     return Future.value(true);
   }
 }
