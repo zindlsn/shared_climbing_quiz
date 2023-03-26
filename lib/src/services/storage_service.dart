@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:shared_climbing_quiz/src/globals.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorageService {
@@ -13,7 +16,7 @@ class LocalStorageService {
 
   Future<bool> saveQuestionsToLocalAsync(String questionsAsJson) async {
     final SharedPreferences prefs = await _prefs;
-    return await prefs.setString('questionsAsJson', questionsAsJson);
+    return await prefs.setString(kLocalStorageQuestionId, questionsAsJson);
   }
 
   Future<bool> saveLastQuestionNumber(int number) async {
@@ -30,8 +33,8 @@ class LocalStorageService {
 
   Future<String?> loadQuestionsFromLocalAsJsonAsync() async {
     final SharedPreferences prefs = await _prefs;
-    if (prefs.containsKey('questionsAsJson')) {
-      return Future.value(prefs.getString('questionsAsJson'));
+    if (prefs.containsKey(kLocalStorageQuestionId)) {
+      return Future.value(prefs.getString(kLocalStorageQuestionId));
     } else {
       return null;
     }
@@ -40,7 +43,7 @@ class LocalStorageService {
 
   Future<bool> hasQuestionsSavedAsync() async {
     final SharedPreferences prefs = await _prefs;
-    bool hasSaved = await prefs.containsKey('questionsAsJson');
+    bool hasSaved = await prefs.containsKey(kLocalStorageQuestionId);
     return Future.value(hasSaved);
   }
 }
