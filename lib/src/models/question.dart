@@ -22,14 +22,4 @@ class Question {
   Question(this.content, this.topic, this.isActive) {
     createdAt = DateTime.now();
   }
-
-  Map toJson() => {
-        'isActive': isActive,
-        'questionType':
-            EnumToString.convertToString(questionType, camelCase: true),
-        'topic': EnumToString.convertToString(topic, camelCase: true)
-            .removeAllWhitespace(),
-        'content': content,
-        'createdTime': createdAt.toString()
-      };
 }
